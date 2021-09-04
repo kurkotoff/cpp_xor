@@ -27,36 +27,6 @@ string read_file(string filename);
 int main(int argc, char **argv){
 	string data, key, output;
 	
-	//for (int i = 0; i < argc; i++){
-	//	cout << argv[i] << " : " << i << endl;
-	//}
-/*	for (int i = 1; i < argc; i++){
-		if (strcmp(argv[i], "-f") == 0 && data.size() == 0){
-			data = argv[i+1];
-			cout << "Data input file: " << argv[i+1];
-		}
-		else if (strcmp(argv[i], "-f") == 0 && data.size() > 0){
-			cout << "error: multiple input files specified!";
-			return 0;
-		}
-
-		if (strcmp(argv[i], "-k") == 0 && key.size() == 0){
-			key = argv[i+1];
-		}
-		else if (strcmp(argv[i], "-k") == 0 && key.size() < 0){
-			cout << "error: multiple key files specified!";
-			return 0;
-		}
-
-		if (strcmp(argv[i], "-o") == 0 && output.size() == 0){
-			output = argv[i+1];
-		}
-		else if (strcmp(argv[i], "-o") == 0 && output.size() > 0){
-			cout << "error: multiple input files specified!";
-			return 0;
-		}
-	} */
-
 	opt::options_description desc("Usage");
 
 	desc.add_options()
