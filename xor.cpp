@@ -1,17 +1,23 @@
+#include <boost/program_options/options_description.hpp>
+#include <boost/program_options/parsers.hpp>
+#include <boost/program_options/value_semantic.hpp>
+#include <boost/program_options/variables_map.hpp>
 #include <iostream>
 #include <string>
 #include <iterator>
 #include <fstream>
 #include <map>
 #include <string.h>
+#include <boost/program_options.hpp>
 
-/* 
+/*
  * This program is designed for
  * Encrypting data with the XOR cipher.
  * Using the given key.
  */
 
 using namespace std;
+namespace opt = boost::program_options;
 
 string my_xor(string data, string key);
 string hexlify(string data);
@@ -24,8 +30,7 @@ int main(int argc, char **argv){
 	//for (int i = 0; i < argc; i++){
 	//	cout << argv[i] << " : " << i << endl;
 	//}
-
-	for (int i = 1; i < argc; i++){
+/*	for (int i = 1; i < argc; i++){
 		if (strcmp(argv[i], "-f") == 0 && data.size() == 0){
 			data = argv[i+1];
 			cout << "Data input file: " << argv[i+1];
@@ -50,10 +55,34 @@ int main(int argc, char **argv){
 			cout << "error: multiple input files specified!";
 			return 0;
 		}
+	} */
+
+	opt::options_description desc("Usage");
+
+	desc.add_options()
+		("input-file,f", opt::value<string>(), "File to read data from")
+		("key-file,k", opt::value<string>(), "File with key")
+		("output-file,o", opt::value<string>(), "Output to <filename>")
+		("help,h", "Show this message");
+
+	opt::variables_map vm;
+	opt::store(opt::parse_command_line(argc, argv, desc), vm);
+	opt::notify(vm);
+
+	if (vm.count("help")){
+		cout << desc << endl;
+		return 0;
 	}
 
-	cout << data << " | " << key << " | " << output << endl;
-	encrypt(data, key, output);
+	if (vm.empty()){
+		cout << desc << endl;
+		return 0;
+	}
+
+	encrypt(vm["input-file"].as<string>(),
+			vm["key-file"].as<string>(),
+			vm["output-file"].as<string>());
+	cout << "Encryption sucessful!";
 	return 0;
 }
 
@@ -67,10 +96,8 @@ string my_xor(string data, string key){
 	int j = key.size();
 
 	for (int i = 0; i < data.size(); i++){
-		cout << "Data: " << data[i] << " | Key: " << key[i%j] << " = ";
 		char new_symbol = data[i] ^ key[i%j];
 		cipher[i] = new_symbol;
-		cout << hex << int(new_symbol) << endl;
 	}
 	
 	return cipher;
